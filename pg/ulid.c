@@ -16,8 +16,7 @@ PG_FUNCTION_INFO_V1(pg_generate_ulid);
 Datum
 pg_generate_ulid(PG_FUNCTION_ARGS)
 {
-	/* pg_uuid_t  *uuid = palloc(sizeof(pg_uuid_t)); */
-	pg_uuid_t  *uuid = malloc(sizeof(pg_uuid_t));
+	pg_uuid_t  *uuid = palloc0(sizeof(pg_uuid_t));
 
   char buffer[sizeof(pg_uuid_t)];
   generate_ulid(&buffer);
