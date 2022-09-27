@@ -4,6 +4,8 @@ const std = @import("std");
 const string = []const u8;
 const base32 = @import("./base32.zig");
 
+const ENCODED_SIZE: usize = 26;
+
 pub const Factory = struct {
     epoch: i64,
     rand: std.rand.Random,
@@ -56,7 +58,7 @@ pub const ULID = struct {
     };
 
     pub fn parse(value: BaseType) Error!ULID {
-        if (value.len != 26) return error.InvalidInputLength;
+        if (value.len != ENCODED_SIZE) return error.InvalidInputLength;
         if (value[0] > '7') {
           return error.Overflow;
         }
