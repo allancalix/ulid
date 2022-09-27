@@ -4,6 +4,7 @@ const std = @import("std");
 const string = []const u8;
 const base32 = @import("./base32.zig");
 
+pub const ULID_SIZE: usize = 16;
 const ENCODED_SIZE: usize = 26;
 
 pub const Factory = struct {
