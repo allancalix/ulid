@@ -36,5 +36,9 @@ pub export fn generate_ulid(buf: [*c]u8) void {
     var gen = ulid.Factory.init(std.time.epoch.posix, rng.random());
     var id = gen.newULID();
 
-    std.mem.copy(u8, buf[0..16], id.id[0..16]);
+    comptime if (id.id.len != ulid.ULID_SIZE) {
+      @panic("unexpected ulid id size");
+    };
+
+    std.mem.copy(u8, buf[0..ulid.ULID_SIZE], &id.id);
 }
