@@ -21,7 +21,7 @@ pub const Factory = struct {
         const now = std.time.milliTimestamp() - self.epoch;
 
         if (now > 281474976710655) {
-         @panic("time.milliTimestamp() is higher than 281474976710655");
+            @panic("time.milliTimestamp() is higher than 281474976710655");
         }
 
         const ms: u64 = @intCast(u64, now);
@@ -33,7 +33,7 @@ pub const Factory = struct {
         buf[3] = @truncate(u8, ms >> 16);
         buf[4] = @truncate(u8, ms >> 8);
         buf[5] = @truncate(u8, ms);
-        
+
         self.rand.bytes(buf[6..]);
 
         return ULID{
@@ -51,7 +51,7 @@ pub const ULID = struct {
     id: [16]u8,
 
     pub const BaseType = string;
-    
+
     pub const Error = error{
         InvalidInputLength,
         Overflow,
@@ -60,7 +60,7 @@ pub const ULID = struct {
     pub fn parse(value: BaseType) Error!ULID {
         if (value.len != ENCODED_SIZE) return error.InvalidInputLength;
         if (value[0] > '7') {
-          return error.Overflow;
+            return error.Overflow;
         }
 
         var buffer: [16]u8 = undefined;
@@ -83,7 +83,7 @@ pub const ULID = struct {
     pub const bindField = toString;
 
     pub fn bytes(self: ULID) [26]u8 {
-      return base32.encode(self.id);
+        return base32.encode(self.id);
     }
 
     pub fn format(self: ULID, comptime fmt: []const u8, options: std.fmt.FormatOptions, writer: anytype) !void {
