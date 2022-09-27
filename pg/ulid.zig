@@ -1,5 +1,5 @@
 const std = @import("std");
-const ulid = @import("src/main.zig");
+const ulid = @import("ulid");
 const pg = @cImport({
   @cInclude("postgres.h");
 });
