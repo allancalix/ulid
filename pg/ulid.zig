@@ -8,13 +8,10 @@ const RndGen = std.rand.DefaultPrng;
 
 const PostgresRnd = struct {
   const This = @This();
-
-  field: u8,
+  ptr: *anyopaque,
 
   pub fn init() This {
-      return .{
-        .field = 0,
-      };
+      return .{ .ptr = undefined, };
   }
 
   pub fn random(self: *This) std.rand.Random {
@@ -26,7 +23,10 @@ const PostgresRnd = struct {
 
     // TODO(allancalix): Fix hardcoded buffer sizes.
     if (!pg.pg_strong_random(buf[0..8], comptime buf.len)) {
-      @panic("could not generate random values");
+      // Fallback RNG if Postgres cannot provide rng.
+      const seed = @truncate(u64, @bitCast(u128, std.time.nanoTimestamp()));
+      var prng = std.rand.DefaultPrng.init(seed);
+      prng.random().bytes(buf);
     }
   }
 };
