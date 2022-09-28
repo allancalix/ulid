@@ -7,6 +7,7 @@ const ulid = Pkg{
 };
 
 pub fn build(b: *std.build.Builder) void {
+    const target = b.standardTargetOptions(.{});
     const mode = b.standardReleaseOptions();
 
     const pg_ulid_lib = b.addStaticLibrary("pg_ulid", "pg/ulid.zig");
@@ -17,6 +18,7 @@ pub fn build(b: *std.build.Builder) void {
     pg_ulid_lib.install();
 
     const pg_ulid = b.addSharedLibrary("ext_pg_ulid", null, b.version(0, 1, 0));
+    pg_ulid.setTarget(target);
     pg_ulid.setBuildMode(mode);
     pg_ulid.addCSourceFile("pg/ulid.c", &[_][]const u8{"-c"});
     pg_ulid.addIncludePath("postgresql-14.5/src/include");
