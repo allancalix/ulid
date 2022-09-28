@@ -13,15 +13,16 @@ pub fn build(b: *std.build.Builder) void {
     pg_ulid_lib.setBuildMode(mode);
     pg_ulid_lib.addIncludePath("postgresql-14.5/src/include");
     pg_ulid_lib.addPackage(ulid);
+    pg_ulid_lib.linkSystemLibrary("c");
     pg_ulid_lib.install();
 
-//   const pg_ulid = b.addSharedLibrary("pg_ulid", "pg/ulid.zig", b.version(0, 1, 0));
-//   pg_ulid.setBuildMode(mode);
-//   // pg_ulid.addCSourceFile("pg/ulid.c", &[_][]const u8{"-c", "-std=c99"});
-//   pg_ulid.addIncludePath("postgresql-14.5/src/include");
-//   pg_ulid.linkLibrary(lib);
-//   pg_ulid.linkSystemLibrary("c");
-//   pg_ulid.install();
+    const pg_ulid = b.addSharedLibrary("ext_pg_ulid", null, b.version(0, 1, 0));
+    pg_ulid.setBuildMode(mode);
+    pg_ulid.addCSourceFile("pg/ulid.c", &[_][]const u8{"-c"});
+    pg_ulid.addIncludePath("postgresql-14.5/src/include");
+    pg_ulid.linkLibrary(pg_ulid_lib);
+    pg_ulid.linkSystemLibrary("c");
+    pg_ulid.install();
 
     // b.default_step.dependOn(&exe.step);
     // const run_cmd = exe.run();
